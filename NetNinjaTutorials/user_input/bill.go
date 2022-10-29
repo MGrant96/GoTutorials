@@ -35,7 +35,7 @@ func (b *bill) format() string {
 	fs += fmt.Sprintf("%-20v ... $%v\n", "Tip:", b.tip)
 
 	// Total
-	fs += fmt.Sprintf("%-20v ... $%0.2f", "Total:", total + b.tip)
+	fs += fmt.Sprintf("%-20v ... $%0.2f", "Total:", total+b.tip)
 	return fs
 }
 
