@@ -21,44 +21,43 @@ func newBill(name string) bill {
 	return b
 }
 
-// format the bill
-// bill type is recieved into this function, this is limiting it being called from a bill object only
-func (b *bill) format() string {
-	fs := "Bill Breakdown: \n"
-	var total float64 = 0
-
-	// List Items
-	// %-20v pushes the spacing over so its all consistent
-	for key, value := range b.items {
-		fs += fmt.Sprintf("%-20v ... $%v \n", key+":", value)
-		total += value
-	}
-
-	// Tip
-	fs += fmt.Sprintf("%-20v ... $%v\n", "Tip:", b.tip)
-
-	// Total
-	fs += fmt.Sprintf("%-20v ... $%0.2f", "Total:", total+b.tip)
-	return fs
-}
-
-// Update the Tip
-func (b *bill) updateTip(tip float64) {
-	b.tip = tip
-}
-
-// Update an Item in the Bill
+// add item to bill
 func (b *bill) addItem(name string, price float64) {
 	b.items[name] = price
 }
 
+// format the bill
+func (b *bill) format() string {
+	fs := "Bill breakdown:\n"
+	var total float64 = 0
+
+	// list items
+	for k, v := range b.items {
+		fs += fmt.Sprintf("%-25v ...$%v\n", k+":", v)
+		total += v
+	}
+
+	// add tip
+	fs += fmt.Sprintf("%-25v ...$%v\n", "tip:", b.tip)
+
+	// add total
+	fs += fmt.Sprintf("%-25v ...$%0.2f", "total:", total+b.tip)
+
+	return fs
+}
+
+// update tip
+func (b *bill) updateTip(tip float64) {
+	(*b).tip = tip
+	// b.tip = tip
+}
+
+// save bill
 func (b *bill) save() {
 	data := []byte(b.format())
 	err := os.WriteFile("bills/"+b.name+".txt", data, 0644)
-
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Bill was saved to file!")
-
+	fmt.Println("Bill saved to file")
 }
